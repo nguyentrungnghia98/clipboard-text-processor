@@ -19,7 +19,7 @@ function App() {
     "https://photon-sol.tinyastro.io/en/lp/{copiedText}",
   ]);
   const [isFilterSolAddress, setIsFilterSolAddress] = useLocalStorage("isFilterSolAddress", true, false, true);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(true);
   const [isModify, setIsModify] = useState(false);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function App() {
         <div className="mt-4  mb-2">Urls</div>
         <div className="box mb-2">
           {urls.map((url, index) => (
-            <div className="url-input flex-center">
+            <div className="url-input flex-center" key={`${url}-${Date.now()}-${index}`}>
               <div className="mr-4">{index + 1}.</div>
               <TextField
                 fullWidth
