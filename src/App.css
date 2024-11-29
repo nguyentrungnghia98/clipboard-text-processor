@@ -1,0 +1,84 @@
+.App {
+  margin-top: 12px;
+}
+
+.donate {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.donate b {
+  margin-right: 8px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+.flex-center-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-center-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
+
+.mt-8 {
+  margin-top: 32px;
+}
+
+.inputs {
+}
+
+.box {
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e1e1e1;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.ml-4 {
+  margin-left: 16px;
+}
+
+.mr-4 {
+  margin-right: 16px;
+}
+.url-input {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pb-4 {
+  padding-bottom: 16px;
+}
