@@ -103,4 +103,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   }) => {
     ipcRenderer.invoke('registerShortcut', data)
   },
+  unregisterAllShortcut: () => {
+    ipcRenderer.invoke('unregisterAllShortcut')
+  }
 })

@@ -224,7 +224,7 @@ ipcMain.handle('registerShortcut', async (event, data: {
   }
   const success = globalShortcut.register(
     data.shortcut,
-    async () => {
+    () => {
       setTimeout(async () => {
         await keyboard.pressKey(Key.LeftControl, Key.C);
         await keyboard.releaseKey(Key.LeftControl, Key.C);
@@ -253,4 +253,8 @@ ipcMain.handle('registerShortcut', async (event, data: {
   if (!success) {
     console.log("Failed to register the global shortcut");
   }
+});
+
+ipcMain.handle('unregisterAllShortcut', () => {
+  globalShortcut.unregisterAll();
 });

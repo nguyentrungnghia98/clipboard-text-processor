@@ -13,21 +13,39 @@ import { useLocalStorage } from "./use-local-storage";
 
 function App() {
   const [shortcut, setShortcut] = useLocalStorage("shortcut", "CommandOrControl+Shift+C");
-  const [urls, setUrls] = useLocalStorageJson<string[]>('urls', [
-    "https://x.com/search?q={copiedText}&src=typed_query",
-    "https://pump.fun/coin/{copiedText}",
-    "https://photon-sol.tinyastro.io/en/lp/{copiedText}",
+  const [urls, setUrls] = useLocalStorageJson<{
+    value: string;
+    isSelected: boolean;
+  }[]>('urls_2', [
+    {
+      value: "https://x.com/search?q={copiedText}&src=typed_query",
+      isSelected: true
+    },
+    {
+      value: "https://pump.fun/coin/{copiedText}",
+      isSelected: true
+    },
+    {
+      value: "https://photon-sol.tinyastro.io/en/lp/{copiedText}",
+      isSelected: true
+    },
   ]);
   const [isFilterSolAddress, setIsFilterSolAddress] = useLocalStorage("isFilterSolAddress", true, false, true);
   const [isRunning, setIsRunning] = useState(true);
   const [isModify, setIsModify] = useState(false);
 
   useEffect(() => {
-    (window as any).electronAPI.registerShortcut({
-      shortcut,
-      urls,
-      isFilterSolAddress,
-    });
+    if (isRunning) {
+      console.log('registerShortcut');
+      (window as any).electronAPI.registerShortcut({
+        shortcut,
+        urls: urls.filter(item => item.isSelected && Boolean(item.value)).map(item => item.value),
+        isFilterSolAddress,
+      });
+    } else {
+      console.log('unregisterAllShortcut');
+      (window as any).electronAPI.unregisterAllShortcut();
+    }
   }, [isRunning]);
 
   const onStart = () => {
@@ -64,18 +82,27 @@ function App() {
         <div className="mt-4  mb-2">Urls</div>
         <div className="box mb-2">
           {urls.map((url, index) => (
-            <div className="url-input flex-center" key={`${url}-${Date.now()}-${index}`}>
-              <div className="mr-4">{index + 1}.</div>
+            <div className="url-input flex-center" key={`${url.value}-${Date.now()}-${index}`}>
+              <div className="mr-4">
+                <Checkbox
+                  checked={url.isSelected}
+                  onChange={(e) => {setIsModify(true); setUrls(old => {
+                    const newValue = [...old];
+                    newValue[index].isSelected = e.target.checked;
+                    return newValue;
+                  })}}
+                />
+              </div>
               <TextField
                 fullWidth
                 label="Url"
                 variant="outlined"
-                value={url}
+                value={url.value}
                 onChange={(e) => {
                   setIsModify(true);
                   setUrls((old) => {
                     const newValue = [...old];
-                    newValue[index] = e.target.value;
+                    newValue[index].value = e.target.value;
                     return newValue;
                   });
                 }}
@@ -95,7 +122,10 @@ function App() {
         <div className="w-full flex-end">
           <Button
             variant="contained"
-            onClick={() => {setIsModify(true); setUrls((old) => old.concat(""))}}
+            onClick={() => {setIsModify(true); setUrls((old) => old.concat({
+              isSelected: true,
+              value: ""
+            }))}}
           >
             Add
           </Button>
