@@ -82,3 +82,32 @@
 .pb-4 {
   padding-bottom: 16px;
 }
+
+.small-input input {
+  height: 4px;
+}
+.small-input .MuiInputLabel-formControl {
+  top: -8px;
+}
+
+.check-interval .MuiSelect-select {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.watchlist a {
+  color: #007bff!important;
+  cursor: pointer;
+}
+
+.divider {
+  margin-bottom: 42px;
+  border: 1px solid #d3d3d3;
+}
+
+.comment {
+  background: #f7f7f7;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 14px;
+}

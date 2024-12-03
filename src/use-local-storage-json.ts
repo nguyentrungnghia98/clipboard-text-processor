@@ -1,16 +1,16 @@
 import { useState } from "react"
 
-export const parseJSON = <T>(value: string | null): T | undefined => {
+export const parseJSON = <T>(value: string | null, key?: string): T | undefined => {
   try {
     return value === "undefined" ? undefined : JSON.parse(value ?? "");
   } catch {
-    console.log("Parsing error on ", { value });
+    console.log("Parsing error on ", key, { value });
     return undefined;
   }
 };
 
 export const useLocalStorageJson = <T>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] => {
-  const [value, setValue] = useState(parseJSON(localStorage.getItem(key))  || defaultValue);
+  const [value, setValue] = useState(parseJSON(localStorage.getItem(key), key)  || defaultValue);
 
   const handleValueChange: React.Dispatch<React.SetStateAction<T>> = (newValue: T | any)  => {
     if (typeof newValue === 'function') {

@@ -20,14 +20,23 @@ export const useLocalStorage = <T>(
   defaultValue: T,
   isNumber?: boolean,
   isBoolean?: boolean
-): [T, (value: T) => void] => {
+): [T, React.Dispatch<React.SetStateAction<T>>] => {
   const [value, setValue] = useState<T>(
     getValue(key, defaultValue, isNumber, isBoolean)
   );
 
-  const handleValueChange = (newValue: T) => {
-    localStorage.setItem(key, String(newValue));
-    setValue(newValue);
+  const handleValueChange: React.Dispatch<React.SetStateAction<T>> = (newValue: T | any) => {
+    if (typeof newValue === 'function') {
+      // do something
+      setValue(oldValue => {
+        const value =  newValue(oldValue);
+        localStorage.setItem(key, String(value));
+        return value;
+      })
+    } else {
+      localStorage.setItem(key, String(newValue));
+      setValue(newValue);
+    }
   };
 
   return [value, handleValueChange];

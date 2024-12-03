@@ -13,6 +13,7 @@ import { join } from "node:path";
 import { update } from "./update";
 import { Key, keyboard } from "@nut-tree-fork/nut-js";
 import { PublicKey } from "@solana/web3.js";
+import axios from "axios";
 
 // The built directory structure
 //
@@ -257,4 +258,28 @@ ipcMain.handle('registerShortcut', async (event, data: {
 
 ipcMain.handle('unregisterAllShortcut', () => {
   globalShortcut.unregisterAll();
+});
+
+function sleep(time: number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(null);
+    }, time)
+  })
+}
+
+ipcMain.handle('getPumpfunCreatedCoin', async (event, address) => {
+  try {
+    const res = await axios.get(`https://frontend-api.pump.fun/coins/user-created-coins/${address}?offset=0&limit=10&includeNsfw=false`);
+    return res.data ;
+  } catch (_) {
+      await sleep(3000);
+      try {
+        const res = await axios.get(`https://frontend-api.pump.fun/coins/user-created-coins/${address}?offset=0&limit=10&includeNsfw=false`);
+        return res.data;
+      } catch (error) {
+        console.log('getPumpfunCreatedCoin error:', address);
+        return [];
+      }
+  }
 });

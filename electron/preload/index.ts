@@ -105,5 +105,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   unregisterAllShortcut: () => {
     ipcRenderer.invoke('unregisterAllShortcut')
+  },
+  getPumpfunCreatedCoin: (address: string) => {
+    return ipcRenderer.invoke('getPumpfunCreatedCoin', address)
   }
 })
