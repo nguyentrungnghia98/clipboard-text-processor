@@ -306,6 +306,7 @@ export const PumpfunWatchlist: React.FC<Props> = () => {
                     freeSolo
                     value={item.address}
                     onChange={(e, value) => {
+                      console.log('onChange', value);
                       setIsModify(true);
                       setWatchlist((old) => {
                         const newValue = [...old];
@@ -317,6 +318,16 @@ export const PumpfunWatchlist: React.FC<Props> = () => {
                           newValue[index].address = value.value;
                           newValue[index].name = value.title;
                         }
+
+                        return newValue;
+                      });
+                    }}
+                    onInputChange={(e, value) => {
+                      console.log('onInputChange', value);
+                      setIsModify(true);
+                      setWatchlist((old) => {
+                        const newValue = [...old];
+                        newValue[index].address = value;
 
                         return newValue;
                       });

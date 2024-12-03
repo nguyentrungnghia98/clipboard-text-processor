@@ -17,6 +17,7 @@ export const useCommunityWatchlist = () => {
   }, [data])
 
   const fetch = async (isInit: boolean) => {
+    console.log('fetch', isInit);
     if (isInit) setLoading(true);
     try {
       const list = await getCommunityWatchlist();

@@ -23,9 +23,9 @@ export const Pumpfun: React.FC<Props> = () => {
       <div className={tab === "watchlist"? "": "d-none"}>
           <PumpfunWatchlist />
         </div>
-        <div className={tab === "community"? "": "d-none"}>
-          <PumpfunCommunity />
-        </div>
+        {
+          tab === "community" && <PumpfunCommunity />
+        }
     </>
   );
 };
