@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="App container">
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <Tabs
           className="mb-6 text-bold ml-[-16px]"
           value={tab}
@@ -32,14 +32,15 @@ function App() {
           <b>Donate (SOL):</b>
           <span>A9U41fxcysG8KAE7sEvGpiRS1Udrkv84iuii7NiCFwzs</span>
         </div>
-      </div>
+      </div> */}
 
-      <div className={tab === "clipboard" ? "" : "d-none"}>
+      {/* <div className={tab === "clipboard" ? "" : "d-none"}> */}
+      <div>
         <ClipboardText />
       </div>
-      <div className={tab === "pumpfun" ? "" : "d-none"}>
+      {/* <div className={tab === "pumpfun" ? "" : "d-none"}>
         <Pumpfun />
-      </div>
+      </div> */}
     </div>
   );
 }

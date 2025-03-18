@@ -49,6 +49,9 @@
 }
 
 .inputs {
+  border: 1px solid #e1e1e1;
+  padding: 16px 16px 4px;
+  border-radius: 8px;
 }
 
 .box {

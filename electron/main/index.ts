@@ -14,6 +14,7 @@ import { update } from "./update";
 import { Key, keyboard } from "@nut-tree-fork/nut-js";
 import { PublicKey } from "@solana/web3.js";
 import axios from "axios";
+import { ethers } from "ethers";
 
 // The built directory structure
 //
@@ -216,44 +217,50 @@ ipcMain.handle("open-win", (_, arg) => {
 ipcMain.handle('registerShortcut', async (event, data: {
   shortcut: string;
   urls: string[],
-  isFilterSolAddress: boolean
-}) => {
+  fitlerText: string
+}[]) => {
   globalShortcut.unregisterAll();
-  if (!data.shortcut || !data.urls.length) {
-    console.log("Something wrong!");
-    return;
-  }
-  const success = globalShortcut.register(
-    data.shortcut,
-    () => {
-      setTimeout(async () => {
-        await keyboard.pressKey(Key.LeftControl, Key.C);
-        await keyboard.releaseKey(Key.LeftControl, Key.C);
-        const copiedText = clipboard.readText().trim();
-
-        try {
-          let text: string | undefined = copiedText;
-          if (data.isFilterSolAddress) {
-            text = copiedText.split(" ").map(item => item.trim()).find(item => {
-              try {
-                new PublicKey(item);
-                return true;
-              } catch (error) {
-                return false
-              }
-            })
-          }
-          if (!text) return;
-          data.urls.map(url => {
-            shell.openExternal(url.replaceAll("{copiedText}", text));
-          })
-        } catch (error) {}
-      }, 100)
+  data.forEach(item => {
+    if (!item.shortcut || !item.urls.length) {
+      console.log("Something wrong!");
+      return;
     }
-  );
-  if (!success) {
-    console.log("Failed to register the global shortcut");
-  }
+    const success = globalShortcut.register(
+      item.shortcut,
+      () => {
+        setTimeout(async () => {
+          await keyboard.pressKey(Key.LeftControl, Key.C);
+          await keyboard.releaseKey(Key.LeftControl, Key.C);
+          const copiedText = clipboard.readText().trim();
+  
+          try {
+            let text: string | undefined = copiedText;
+            if (item.fitlerText && item.fitlerText !== 'None') {
+              text = copiedText.split(" ").map(item => item.trim()).find(text => {
+                try {
+                  if (item.fitlerText === "solana") {
+                    new PublicKey(text);
+                  } else {
+                    ethers.isAddress(text);
+                  }
+                  return true;
+                } catch (error) {
+                  return false
+                }
+              })
+            }
+            if (!text) return;
+            item.urls.map(url => {
+              shell.openExternal(url.replaceAll("{copiedText}", text));
+            })
+          } catch (error) {}
+        }, 100)
+      }
+    );
+    if (!success) {
+      console.log("Failed to register the global shortcut");
+    }
+  })
 });
 
 ipcMain.handle('unregisterAllShortcut', () => {
